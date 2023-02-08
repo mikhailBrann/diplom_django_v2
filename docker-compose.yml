@@ -1,0 +1,64 @@
+version: '3.7'
+services:
+  database:
+    container_name: orders-db
+    image: postgres:11.0-alpine
+    networks:
+      - app-network
+    environment:
+      DEBUG: 'false'
+    env_file:
+      - .env
+
+  redis:
+    container_name: orders-redis
+    depends_on:
+      - database
+    image: redis:alpine
+
+  orders-app:
+    container_name: orders-app
+    depends_on:
+      - redis
+    build:
+      context: orders
+      dockerfile: ./Dockerfile
+    command: sh ./boot.sh
+    env_file:
+      - .env
+    ports:
+      - 8000:8000
+    networks:
+      - app-network
+
+
+
+
+
+
+#  celery:
+#    build: ./orders
+#    command: celery -A orders worker -l info
+#    volumes:
+#      - ./:/usr/src/app/
+#    env_file:
+#      - .env
+#    depends_on:
+#      - redis
+#
+#  celery-beat:
+#    build: ./orders
+#    command: celery -A orders beat -l info
+#    volumes:
+#      - ./:/usr/src/app/
+#    env_file:
+#      - .env
+#    depends_on:
+#      - redis
+
+volumes:
+  static_volume:
+
+networks:
+  app-network:
+    driver: bridge
