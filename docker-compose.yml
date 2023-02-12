@@ -31,31 +31,6 @@ services:
     networks:
       - app-network
 
-
-
-
-
-
-#  celery:
-#    build: ./orders
-#    command: celery -A orders worker -l info
-#    volumes:
-#      - ./:/usr/src/app/
-#    env_file:
-#      - .env
-#    depends_on:
-#      - redis
-#
-#  celery-beat:
-#    build: ./orders
-#    command: celery -A orders beat -l info
-#    volumes:
-#      - ./:/usr/src/app/
-#    env_file:
-#      - .env
-#    depends_on:
-#      - redis
-
 volumes:
   static_volume:
 
